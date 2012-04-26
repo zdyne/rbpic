@@ -1,0 +1,26 @@
+#!ruby
+
+require 'trollop'
+
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'rbpic/gen'
+
+opts = Trollop::options do
+  version "rbpic-compile #{RbPIC::VERSION} (c) 2006-2012 Patrick J. Franz"
+
+  banner <<-EOS
+Usage:
+      rbpic-compile [options] <script>
+
+options:
+EOS
+
+  opt :assemble_only, "Output assembly only; don't link.", :short => 'S'
+end
+
+asm = RbPIC::RSM.load ARGV[0]
+
+asm_name = ARGV[0].chomp(File.extname(ARGV[0])) + '.asm'
+File.open(asm_name, 'w') { |f| asm.each { |line| f.puts line } }
+
+`mpasmx /pPIC10F202 /t2 #{asm_name}` unless opts[:assemble_only]

@@ -1,0 +1,10 @@
+# This sample code sets GPIO pin 0 to high.
+
+init_clock
+
+config_io :gp0 => :out, :gp1 => :ignore, :gp2 => :ignore, :gp3 => :ignore
+
+
+loop :main do
+  set_io :gp0 => :hi
+end

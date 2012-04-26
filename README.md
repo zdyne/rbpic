@@ -33,6 +33,11 @@ Limitations
 * While the output assembly seems to work well, it's not optimized at
   all. (Any perceived optimization is coincidental at best.)
   
+Installation
+------------
+
+    gem install rbpic
+
 Usage
 -----
 

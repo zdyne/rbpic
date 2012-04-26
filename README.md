@@ -48,13 +48,13 @@ the compiled assembly only.
 DSL Syntax
 ----------
 
-* **`constants`**`(&block)`
+* `constants(&block)`
 
   > A block that defines a set of global varibles that can be
     referenced later using other routnes. (This is how you add
     "variables" to your assembly.)
 
-* **`init_clock`**
+* `init_clock`
 
   > Copies the oscillator calibration value into the `OSCCAL`
     register. Configures the `OPTION` register. This must be the first
@@ -62,7 +62,7 @@ DSL Syntax
     possible that the `W` register will be overwritten and a bad value
     will be copied into the `OSCCAL` register.
     
-* **`subr`**`(label, &block)`
+* `subr(label, &block)`
 
   > Creates a new subroutine. There is a limit to the number of
     nested subroutine calls that can be made. The PIC10F202 has a
@@ -70,14 +70,14 @@ DSL Syntax
     to comply by dropping the oldest return values. The compiler does
     not currently prevent this from happening.
     
-* **`done`**`(W)`
+* `done(W)`
 
   > Returns from the current subroutine and sets the `W` register to
     the specified value. Currently, you must add this call to the end
     of your `subr` block. Future versions of `subr` should do this
     automatically.
     
-* **`config_io`**`({port, state})`
+* `config_io({port, state})`
 
   > Configure the GPIO tristate register. Takes a hash mapping ports
     (`:gp0`, etc.) to their state (`:out`, etc.). This routine is
@@ -86,72 +86,72 @@ DSL Syntax
     multiple I/O ports with up to 8 pins per port!)
     
     
-* **`set`**`(sym, val)`
+* `set(sym, val)`
 
   > Sets a symbol previous defined in `constants` to the specfied
     value.
     
-* **`loop`**`(label, &block)`
+* `loop(label, &block)`
 
   > Creates a loop named `label` whose implementation is in
     `block`. One suggested convention is to have a top-level loop
     called 'main'.
     
-* **`block`**`(label, &block)`
+* `block(label, &block)`
 
   > Similar to `loop` but does not `goto` the loop label at the end of
     the block. Mostly used to logically group code together with a
     useful name.
     
-* **`set_io`**`({port, value})`
+* `set_io({port, value})`
 
   > Sets the specified `port` to `value` where `value` is either `:hi`
     or `:lo`. This routine is aware that `:gp3` on the PIC10F202 is an
     input-only port and won't let you set it.
     
-* **`set_bit`**`(var, bit)`
+* `set_bit(var, bit)`
 
   > Sets the specified `bit` in `var`.
   
-* **`clear_bit`**`(var, bit)`
+* `clear_bit(var, bit)`
 
   > Clears the specified `bit` in `var`.
   
-* **`test`**`(var, bit, target)`
+* `test(var, bit, target)`
 
   > Tests the specified `bit` in `val` and, counterintuitively, if it
     isn't set then jumps to the `target` label.
 
-* **`decrement_by`**`(val, sym)`
+* `decrement_by(val, sym)`
 
   > Decrements `sym` by `val`.
   
-* **`increment_by`**`(val, sym)`
+* `increment_by(val, sym)`
 
   > Increments `sym` by `val`.
 
-* **`copy`**`(from, to)`
+* `copy(from, to)`
 
   > Copies the value in `from` to `to`.
 
-* **`test_carry`**`(target)`
+* `test_carry(target)`
 
   > Tests the carry bit of the `STATUS` register and jumps to the
     `target` label if it is clear.
     
-* **`add`**`(val, to)`
+* `add(val, to)`
 
   > Adds `val` to the symbol `to`.
   
-* **`subtract`**`(val, from)`
+* `subtract(val, from)`
 
   > Subtracts `val` from `from`.
   
-* **`subtract_and_set`**`(sym, from)`
+* `subtract_and_set(sym, from)`
 
   > Subtracts the value of `sym` from `from`.
   
-* **`delay`**`(secs)`
+* `delay(secs)`
 
   > Delays execution for `secs` seconds. The compiler automatically
     creates a subroutine called `Four_microsecond_delay`, which relies
@@ -160,26 +160,26 @@ DSL Syntax
     routine is also very space inefficient as it splats out (`secs` /
     4 μs) number of calls to `Four_microsecond_delay`.
     
-* **`decrement_and_test`**`(var, *ops)`
+* `decrement_and_test(var, *ops)`
 
   > Decrement `var` and test if it is zero. If `var` is non-zero,
     `*ops` is executed, where `*ops` should be a set of arguments that
     will be interpolated as the next line of RSM: `:jump,
     :some_label`, for instance.
     
-* **`jump`**`(label)`
+* `jump(label)`
 
   > Goto the specified `label`.
   
-* **`increment`**`(var)`
+* `increment(var)`
 
   > Increments `var` by one.
   
-* **`decrement`**`(var)`
+* `decrement(var)`
 
   > Decrements `var` by one.
 
-* **`<subroutine name>`**
+* `<subroutine name>`
 
   > Calls the subroutine.
 
